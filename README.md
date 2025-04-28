@@ -43,11 +43,10 @@ RAG는 크게 두 단계로 동작합니다.
 ### 핵심 컴포넌트
 - **Vector DB**: ChromaDB (포트 8000)
   - 문서의 벡터 임베딩을 저장하고 유사도 검색 제공
-  - 효율적인 벡터 검색을 위한 인덱싱 지원
 - **임베딩 서버**: Sentence Transformers (포트 8080)
   - all-MiniLM-L6-v2 모델 사용
   - 텍스트를 고차원 벡터로 변환
-- **LLM**: Ollama/Mistral (포트 11434)
+- **LLM**: Ollama/llama3.2:1b (포트 11434)
   - 검색된 문맥을 바탕으로 응답 생성
   - 로컬에서 실행되는 오픈소스 LLM 활용
 - **API 서버**:
@@ -87,7 +86,7 @@ RAG는 크게 두 단계로 동작합니다.
 docker compose up -d
 
 # Mistral 모델 설치 
-curl -X POST http://localhost:11434/api/pull -d '{"name": "mistral"}'
+docker compose ollama run llama3.2:1b
 
 # 서비스 상태 확인
 docker compose ps
@@ -126,7 +125,7 @@ python main.py    # 서버 실행
 # 질문하기
 curl -X POST http://localhost:3000/rag/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "트랄라레오 트랄랄라가 누군지 설명해줘"}'
+  -d '{"question": "트랄랄레로 트랄랄라와 퉁퉁퉁 사후르가 싸우면 누가 이기니?"}'
 ```
 
 ### LangChain RAG (포트 3001)
@@ -135,19 +134,8 @@ curl -X POST http://localhost:3000/rag/ask \
 # 질문하기
 curl -X POST http://localhost:3001/rag/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "트랄라레오 트랄랄라가 누군지 설명해줘"}'
+  -d '{"question": "트랄랄레로 트랄랄라와 퉁퉁퉁 사후르가 싸우면 누가 이기니?"}'
 ```
-
-## 시스템 요구사항
-
-1. 하드웨어
-   - 최소 8GB RAM (Ollama LLM 실행용)
-   - 충분한 디스크 공간 (모델 및 벡터 DB 저장용)
-
-2. 소프트웨어
-   - Docker 및 Docker Compose
-   - Node.js 18+ (수동 실행 시)
-   - Python 3.9+ (수동 실행 시)
 
 ## 문제 해결
 

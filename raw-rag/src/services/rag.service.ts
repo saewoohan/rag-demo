@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class RagService {
   private readonly ollamaUrl: string;
-  private readonly model: string = 'mistral';
+  private readonly model: string = 'llama3.2:1b';
 
   constructor(
     private readonly embeddingService: EmbeddingService,
@@ -68,14 +68,14 @@ export class RagService {
 
       // 2. Construct the prompt
       const context = documents.join('\n\n');
-      const prompt = `다음은 Italian Brainrot 캐릭터들에 대한 정보입니다:
+      const prompt = `Here is information about Italian Brainrot characters:
 
 ${context}
 
-위 정보를 바탕으로 다음 질문에 답변해주세요:
+Based on the above information, please answer the following question:
 ${question}
 
-가능한 한 주어진 정보만을 사용하여 답변해주세요. 정보가 불충분하다면 그렇다고 말씀해주세요.`;
+Please use only the provided information to answer. If the information is insufficient, please say so.`;
 
       // 3. Generate answer with LLM
       const answer = await this.generateResponse(prompt);
