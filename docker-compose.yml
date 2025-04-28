@@ -57,16 +57,6 @@ services:
         limits:
           memory: 8G
 
-  ollama-webui:
-    image: ghcr.io/ollama-webui/ollama-webui:main
-    ports:
-      - '8081:8080'
-    environment:
-      - OLLAMA_API_BASE_URL=http://ollama:11434/api
-    depends_on:
-      - ollama
-    restart: unless-stopped
-
 volumes:
   chroma-data:
   ollama-data:
