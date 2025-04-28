@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Remove any existing ChromaDB data and then run ingest
-RUN rm -rf chroma_db && python ingest.py
+# Make start script executable
+RUN chmod +x start.sh
 
-CMD ["python", "main.py"] 
+CMD ["./start.sh"]

@@ -6,6 +6,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+import chromadb
 import os
 from dotenv import load_dotenv
 
@@ -24,19 +25,22 @@ class Answer(BaseModel):
     answer: str
     sources: List[Source]
 
-# Initialize components
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# Initialize ChromaDB
+chroma_url = os.getenv('CHROMA_URL', 'http://localhost:8000')
+host, port = chroma_url.replace('http://', '').split(':')
+
+client = chromadb.HttpClient(host=host, port=port)
+
 vectorstore = Chroma(
-    persist_directory="chroma_db",
+    collection_name="langchain_characters",
+    client=client,
     embedding_function=embeddings
 )
 
-# Initialize Ollama
-ollama_base_url = os.getenv("OLLAMA_URL", "http://ollama:11434")
+ollama_base_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
 llm = Ollama(base_url=ollama_base_url, model="mistral")
 
 # Create prompt template
