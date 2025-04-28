@@ -80,7 +80,7 @@ ${question}
       // 3. Generate answer with LLM
       const answer = await this.generateResponse(prompt);
 
-      // 4. 소스와 함께 결과 반환
+      // 4. Return the answer with sources
       return {
         answer,
         sources: documents.map((doc, i) => ({

@@ -35,18 +35,15 @@ doc = Document(
 documents.append(doc)
 
 def ingest_documents():
-    # Initialize embedding model
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     
-    # Initialize ChromaDB
     vectorstore = Chroma(
         persist_directory="chroma_db",
         embedding_function=embeddings
     )
     
-    # Add documents to ChromaDB
     vectorstore.add_documents(documents)
     print(f"Added {len(documents)} documents to ChromaDB")
 

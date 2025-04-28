@@ -72,12 +72,10 @@ export class EmbeddingService implements OnModuleInit {
 
   private async initialize() {
     try {
-      // Initialize ChromaDB client with the URL from environment
       const chromaClient = new ChromaClient({
         path: this.chromaUrl,
       });
 
-      // Get or create collection
       this.collection = await chromaClient.getOrCreateCollection({
         name: this.collectionName,
         metadata: {
@@ -85,7 +83,6 @@ export class EmbeddingService implements OnModuleInit {
         },
       });
 
-      // Check if embedding server is running
       const healthCheck = await fetch(`${this.embeddingServerUrl}/health`);
       if (!healthCheck.ok) {
         throw new Error('Embedding server is not running');
@@ -123,10 +120,7 @@ export class EmbeddingService implements OnModuleInit {
   }
 
   private preprocessText(text: string): string {
-    return text
-      .trim()
-      .replace(/\s+/g, ' ') // Remove extra spaces
-      .toLowerCase(); // Convert to lowercase
+    return text.trim().replace(/\s+/g, ' ').toLowerCase();
   }
 
   async addDocument(
@@ -170,7 +164,6 @@ export class EmbeddingService implements OnModuleInit {
         where: serializedFilters,
       });
 
-      // Transform the results to include deserialized metadata
       const customResults: CustomQueryResponse = {
         ...results,
         metadatas: results.metadatas?.map((metadataArray) =>

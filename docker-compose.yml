@@ -3,9 +3,7 @@ version: '3.8'
 services:
   # Raw RAG implementation
   raw-rag-server:
-    build: 
-      context: ./raw-rag
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/raw-rag-server:latest
     ports:
       - "3000:3000"
     environment:
@@ -18,17 +16,13 @@ services:
       - ollama
 
   embedding-server:
-    build:
-      context: ./raw-rag/embedding_server
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/embedding-server:latest
     ports:
       - "8080:8080"
 
   # LangChain RAG implementation
   langchain-rag-server:
-    build:
-      context: ./langchain-rag
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/langchain-rag-server:latest
     ports:
       - "3001:3000"
     environment:

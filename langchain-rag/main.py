@@ -24,22 +24,18 @@ class Answer(BaseModel):
     answer: str
     sources: List[Source]
 
-# Initialize components
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# Initialize ChromaDB
 vectorstore = Chroma(
     persist_directory="chroma_db",
     embedding_function=embeddings
 )
 
-# Initialize Ollama
 ollama_base_url = os.getenv("OLLAMA_URL", "http://ollama:11434")
 llm = Ollama(base_url=ollama_base_url, model="mistral")
 
-# Create prompt template
 template = """다음은 Italian Brainrot 캐릭터들에 대한 정보입니다:
 
 {context}
@@ -54,7 +50,6 @@ PROMPT = PromptTemplate(
     input_variables=["context", "question"]
 )
 
-# Initialize RAG chain
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",
@@ -68,10 +63,8 @@ qa_chain = RetrievalQA.from_chain_type(
 @app.post("/rag/ask", response_model=Answer)
 async def ask_question(question: Question):
     try:
-        # Get answer from RAG chain
         result = qa_chain({"query": question.question})
         
-        # Format sources
         sources = [
             Source(
                 content=doc.page_content,
