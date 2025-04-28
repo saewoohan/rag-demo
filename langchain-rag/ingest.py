@@ -4,7 +4,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.schema import Document
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'data', 'characters.json'), 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(__file__), 'data', 'characters.json'), 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 documents = []
