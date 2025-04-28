@@ -37,7 +37,7 @@ export class LoadDataCommand extends CommandRunner {
     try {
       const charactersData: CharacterData = JSON.parse(
         fs.readFileSync(
-          path.join(__dirname, '../../data/characters.json'),
+          path.join(process.cwd(), '..', 'data', 'characters.json'),
           'utf-8',
         ),
       );
