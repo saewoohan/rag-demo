@@ -3,13 +3,8 @@ import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.schema import Document
-from chromadb.config import Settings
-import chromadb
-from dotenv import load_dotenv
 
-load_dotenv()
-
-with open(os.path.join(os.path.dirname(__file__), 'data', 'characters.json'), 'r', encoding='utf-8') as f:
+with open(os.path.join(os.path.dirname(__file__), '..', 'data', 'characters.json'), 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 documents = []
@@ -40,21 +35,18 @@ doc = Document(
 documents.append(doc)
 
 def ingest_documents():
+    # Initialize embedding model
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     
-    chroma_url = os.getenv('CHROMA_URL', 'http://localhost:8000')
-    host, port = chroma_url.replace('http://', '').split(':')
-    
-    client = chromadb.HttpClient(host=host, port=port)
-    
+    # Initialize ChromaDB
     vectorstore = Chroma(
-        collection_name="langchain_characters",
-        client=client,
+        persist_directory="chroma_db",
         embedding_function=embeddings
     )
     
+    # Add documents to ChromaDB
     vectorstore.add_documents(documents)
     print(f"Added {len(documents)} documents to ChromaDB")
 
