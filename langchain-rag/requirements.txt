@@ -1,0 +1,8 @@
+langchain==0.1.9
+langchain-community==0.0.27
+chromadb==0.4.24
+fastapi==0.110.0
+uvicorn==0.27.1
+python-dotenv==1.0.1
+sentence-transformers==2.5.1
+pydantic>=2.7.4,<3.0.0 

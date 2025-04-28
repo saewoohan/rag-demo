@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Raw RAG implementation
+  raw-rag-server:
+    build: 
+      context: ./raw-rag
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - EMBEDDING_SERVER_URL=http://embedding-server:8080
+      - CHROMA_URL=http://chroma-db:8000
+      - OLLAMA_URL=http://ollama:11434
+    depends_on:
+      - embedding-server
+      - chroma-db
+      - ollama
+
+  embedding-server:
+    build:
+      context: ./raw-rag/embedding_server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  # LangChain RAG implementation
+  langchain-rag-server:
+    build:
+      context: ./langchain-rag
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+    depends_on:
+      - embedding-server
+      - chroma-db
+      - ollama
+
+  # Shared services
+  chroma-db:
+    image: chromadb/chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+
+  ollama-webui:
+    image: ghcr.io/ollama-webui/ollama-webui:main
+    ports:
+      - '8081:8080'
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama:11434/api
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  chroma-data:
+  ollama-data:
