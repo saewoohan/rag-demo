@@ -1,7 +1,7 @@
 #!/bin/sh
 
-echo "Loading data..."
+echo "Loading data"
 yarn cli:dev load:data
 
-echo "Starting server..."
+echo "Starting server"
 yarn start:prod 
