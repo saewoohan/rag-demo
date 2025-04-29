@@ -85,7 +85,7 @@ RAG는 크게 두 단계로 동작합니다.
 # 모든 서비스 실행
 docker compose up -d
 
-# Mistral 모델 설치 
+# llama3.2:1b 모델 설치 
 docker compose ollama run llama3.2:1b
 
 # 서비스 상태 확인
